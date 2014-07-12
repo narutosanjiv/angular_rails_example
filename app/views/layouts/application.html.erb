@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html ng-app="todoApp">
+  <head>
+    <title>TodoListExample</title>
+    <%= stylesheet_link_tag    'application'%>
+    <%= javascript_include_tag 'application'%>
+    <%= yield :js %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body ng-controller="TodoCtrlController">
+    <%= yield %>
+  </body>
+</html>
