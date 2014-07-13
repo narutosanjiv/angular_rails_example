@@ -1,4 +1,27 @@
-var todoApp = angular.module("todoApp", ['ngResource']);
+var todoApp = angular.module("todoApp", ['ngRoute', 'ngResource']).
+  config(['$routeProvider', function($routeProvider) {
+    $routeProvider
+    .when('/', {
+      templateUrl: 'views/home.html',
+      controller: 'HomeController'
+    })
+    .when('/login', {
+      templateUrl: 'views/login.html',
+      controller: 'LoginController'
+    })
+    .when('/dashboard', {
+      templateUrl: 'views/dashboard.html',
+      controller: 'DashboardController',
+      resolve: {
+        user: function(SessionService) {
+          return SessionService.getCurrentUser();
+        }
+      }
+    })
+    .otherwise({
+      redirectTo: '/'
+    }); 
+  }]);
 var model_data = {
     name: 'Adam',
     items:[
@@ -8,7 +31,9 @@ var model_data = {
       {desc: 'Call Joe', done: 'No'}
     ]
   };
-todoApp.controller("TodoCtrlController", function($scope){
+
+
+todoApp.controller("TodoCtrlController", ['$scope', '$location',  function($scope, $location){
   $scope.todo = model_data;
   $scope.incompleteCount = function(){
     var count = 0;
@@ -20,10 +45,11 @@ todoApp.controller("TodoCtrlController", function($scope){
 
   $scope.add_to_list = function(){
     $scope.todo.items.push({desc: 'Check', done: 'Yes'})    
+    $location.path('/login');      
   };
 
   $scope.remove_from_list = function(){
-      
+    $location.path('/home');      
     
   };
-});
+}]);
