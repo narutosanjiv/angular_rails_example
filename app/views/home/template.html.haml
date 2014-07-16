@@ -1,3 +1,13 @@
+- a = 2
 %input{type: 'text', :'ng-model' => 'test'}/
 %span
   {{test}}
+%div{"ng-show" => "#{a} + #{a} == 5"}
+  2 + 2 isn't 5, don't show
+%div{"ng-show" => "#{a} + #{a} == 4"}
+  2 + 2 is 4, do show
+%div{"ng-hide" => "2 + 2 == 5"}
+  2 + 2 isn't 5, don't hide
+%div{"ng-hide" => "2 + 2 == 4"}
+  2 + 2 isn't 5, do hide
+
