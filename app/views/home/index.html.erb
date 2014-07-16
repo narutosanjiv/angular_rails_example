@@ -1,3 +1,9 @@
+<div my-directive my-url="http://google.com" my-link-text="Click me to go to Google" some-text='aaaaaaaaa'></div>
+<div class='row'>
+  <button class="btn btn-default btn-info" ng-click="add_to_list()">Add</button>
+</div>
+
+<!-- directive: my-directive -->
 <div class="page-header">
   <h1>{{todo.name}}'s To Do List</h1>
   <span class="label label-default" ng-hide="incompleteCount() == 0">
@@ -32,6 +38,6 @@
       </tr>
     </tbody>
   </table>
-  <div class="container-fluid" ng-include src="'aaaaaaaaaa.html'"> </div>
+  <div class="container-fluid" ng-include src="'template'"> </div>
   <ng-view></ng-view>
 </div>

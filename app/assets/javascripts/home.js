@@ -32,7 +32,24 @@ var model_data = {
     ]
   };
 
-
+todoApp.directive('myDirective', function() {
+  return {
+    restrict: 'EACM',
+    replace: false,
+    scope: {
+      myUrl: '@',
+      // binding strategy
+      myLinkText: '@', // binding strategy
+      myText: '@someText'
+    },
+    template: '<div>\
+<label>My Url Field:</label>\
+<input type="text"\
+ng-model="myUrl" />\
+<a href="{{myUrl}}">{{myLinkText}}</a>\
+</div>'
+  }
+})
 todoApp.controller("TodoCtrlController", ['$scope', '$location',  function($scope, $location){
   $scope.todo = model_data;
   $scope.incompleteCount = function(){
