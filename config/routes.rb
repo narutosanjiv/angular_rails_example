@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {sessions: "sessions"}
+  
   resources :restaurants
 
   namespace :api, defaults: {format: :json} do
@@ -15,7 +16,8 @@ Rails.application.routes.draw do
   
   root 'home#index'
   get '/template' => 'home#template'
-
+  get '/form' => 'home#form'
+  get '/pagination' => 'home#pagination'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

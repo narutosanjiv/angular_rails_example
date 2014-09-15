@@ -1,13 +1,14 @@
-var todoApp = angular.module("todoApp", ['ngRoute', 'ngResource']).
-  config(['$routeProvider', function($routeProvider) {
-    $routeProvider
+var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource']).
+  config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvider1) {
+    $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+    $routeProvider1
     .when('/', {
       templateUrl: 'views/home.html',
       controller: 'HomeController'
     })
-    .when('/login', {
-      templateUrl: 'views/login.html',
-      controller: 'LoginController'
+    .when('/form', {
+      templateUrl: '/form',
+      controller: 'FormController'
     })
     .when('/dashboard', {
       templateUrl: 'views/dashboard.html',
@@ -18,10 +19,66 @@ var todoApp = angular.module("todoApp", ['ngRoute', 'ngResource']).
         }
       }
     })
+    .when('/users/sign_in', {templateUrl:'/users/login.html', controller: 'UsersCtrl'})
+    .when('/users/register', {templateUrl:'/users/register.html', controller: 'UsersCtrl'})
     .otherwise({
       redirectTo: '/'
     }); 
-  }]);
+  }])
+  .factory("session", function($location, $http, $q){
+    function redirect(url) {
+      url = url || '/';
+      $location.path(url);
+    }
+    
+    var service = {
+        login: function(email, password) {
+            return $http.post('/users/sign_in', {user: {email: email, password: password} })
+                .then(function(response) {
+                    service.currentUser = response.data.user;
+                    if (service.isAuthenticated()) {
+                        //TODO: Send them back to where they came from
+                        //$location.path(response.data.redirect);
+                    }
+                });
+        },
+
+        logout: function(redirectTo) {
+            $http.post('/logout').then(function() {
+                service.currentUser = null;
+                redirect(redirectTo);
+            });
+        },
+
+        register: function(email, password, confirm_password) {
+            return $http.post('/users.json', {user: {email: email, password: password, password_confirmation: confirm_password} })
+            .then(function(response) {
+                service.currentUser = response.data;
+                if (service.isAuthenticated()) {
+                }
+            });
+        },
+        requestCurrentUser: function() {
+            if (service.isAuthenticated()) {
+                return $q.when(service.currentUser);
+            } else {
+                return $http.get('/current_user').then(function(response) {
+                    service.currentUser = response.data.user;
+                    return service.currentUser;
+                });
+            }
+        },
+
+        currentUser: null,
+
+        isAuthenticated: function(){
+            return !!service.currentUser;
+        }
+    };
+
+    return service;
+     
+  });
 var model_data = {
     name: 'Adam',
     items:[
@@ -50,8 +107,9 @@ ng-model="myUrl" />\
 </div>'
   }
 })
-todoApp.controller("TodoCtrlController", ['$scope', '$location',  function($scope, $location){
+todoApp.controller("TodoCtrlController", ['$scope', '$location', 'session',  function($scope, $location, session){
   $scope.todo = model_data;
+  session.login('sanjiv', 'sanjiv');
   $scope.incompleteCount = function(){
     var count = 0;
     angular.forEach($scope.todo.items, function (item) {
@@ -69,4 +127,13 @@ todoApp.controller("TodoCtrlController", ['$scope', '$location',  function($scop
     $location.path('/home');      
     
   };
+}]);
+
+todoApp.controller("PaginationController", ['$scope', '$location',  function($scope, $location){
+}]);
+
+todoApp.controller("FormController", ['$scope', '$location',  function($scope, $location){
+}]);
+
+todoApp.controller("UsersCtrl", ['$scope', '$location',  function($scope, $location){
 }]);

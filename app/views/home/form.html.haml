@@ -1,0 +1,20 @@
+:css
+  input.ng-invalid {
+  border: 1px solid red;
+  }
+  input.ng-valid {
+  border: 1px solid green;
+  }
+%form{name: 'location_form', "ng-controller" => "FormController", :novalidate => true}
+  %div{"ng-form" => "form-input"}
+    %input{type: "text", name: 'name', "ng-required" => "true", "ng-model" => "location.name",  :placeholder => "Location"}
+    %div{"ng-show" => "form_input.name.$dirty && form_input.name.$invalid"}
+      %span{class: "error", "ng-show" => "form_input.name.$error.required"}
+        Enter the name
+  %div{"ng-form" => "form-input"}
+    %input{type: "text", name: 'product_name', "ng-required" => "true", "ng-model" => "location.product_name",  :placeholder => "ProductName"}
+    %div{"ng-show" => "form_input.product_name.$dirty && form_input.product_name.$invalid"}
+      %span{class: "error", "ng-show" => "form_input.product_name.$error.required"}
+        Enter the product name
+  %button{type: "submit", "ng-disabled" => "location_form.$invalid"}
+    Submit All
