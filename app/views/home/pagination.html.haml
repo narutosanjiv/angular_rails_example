@@ -1,0 +1,23 @@
+.container-fluid
+  .row-fluid
+    %h1
+      Pagination
+    .col-sm-6
+       
+    .row{:'ng-controller' => 'PaginationsCtrl'}
+      %table.table.table-striped{ :'ng-show' => "restuarents.length"}
+        %thead
+          %tr
+            %th
+              Name
+            %th
+              Desc
+        %tbody
+          %tr{"ng-repeat" => "restuarent in restuarents | pagination: curPage * pageSize | limitTo: pageSize"}
+            %td
+              {{restuarent.id}} 
+            %td
+              {{restuarent.name}}
+           
+         
+      

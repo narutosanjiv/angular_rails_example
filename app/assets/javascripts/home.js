@@ -19,6 +19,7 @@ var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource'
         }
       }
     })
+    .when('/pagination',  {templateUrl:'home/pagination.html', controller: 'PaginationsCtrl'})
     .when('/users/sign_in', {templateUrl:'/users/login.html', controller: 'UsersCtrl'})
     .when('/users/register', {templateUrl:'/users/register.html', controller: 'UsersCtrl'})
     .otherwise({
@@ -79,6 +80,11 @@ var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource'
     return service;
      
   });
+  
+
+todoApp.factory('Restaurent', function($resource){
+  return $resource('/restaurants');
+});
 var model_data = {
     name: 'Adam',
     items:[
@@ -129,7 +135,11 @@ todoApp.controller("TodoCtrlController", ['$scope', '$location', 'session',  fun
   };
 }]);
 
-todoApp.controller("PaginationController", ['$scope', '$location',  function($scope, $location){
+todoApp.controller("PaginationsCtrl", ['$scope', '$location', 'Restaurent', function($scope, $location, Restaurent){
+  $scope.items = [{name: 'sanjiv'}, {name: 'rajiv'}];
+  $scope.restuarents = Restaurent.query();
+
+  
 }]);
 
 todoApp.controller("FormController", ['$scope', '$location',  function($scope, $location){
