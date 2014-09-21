@@ -1,9 +1,11 @@
+%div{:'ng-view'=> true}
 .container-fluid
   .row-fluid
     %h1
       Pagination
     .col-sm-6
-       
+      %a.btn.btn-primary{href: '#/restaurants/new'}      
+        Add  
     .row{:'ng-controller' => 'PaginationsCtrl'}
       %table.table.table-striped{ :'ng-show' => "restuarents.length"}
         %thead
@@ -13,11 +15,17 @@
             %th
               Desc
         %tbody
-          %tr{"ng-repeat" => "restuarent in restuarents | pagination: curPage * pageSize | limitTo: pageSize"}
+          %tr{"ng-repeat" => "restuarent in restuarents"}
             %td
               {{restuarent.id}} 
             %td
               {{restuarent.name}}
-           
+            %td
+              %a{:'ng-href' => "#/restaurants/{{$index}}", class: 'btn btn-warning'}
+                Edit
+            %td
+              %a{:'ng-href' => "#/restaurants/{{$index}}/delete", class: 'btn btn-danger'}
+                Delete
+         
          
       

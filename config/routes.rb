@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get '/template' => 'home#template'
   get '/form' => 'home#form'
   get '/pagination' => 'home#pagination'
+  get '/filter' => 'home#filter'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

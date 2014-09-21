@@ -13,4 +13,8 @@ class HomeController < ApplicationController
   def pagination
 
   end
+  
+  def filter
+
+  end
 end

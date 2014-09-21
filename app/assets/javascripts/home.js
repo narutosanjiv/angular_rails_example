@@ -1,4 +1,4 @@
-var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource']).
+var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource', 'Services']).
   config(['$httpProvider', '$routeProvider', function($httpProvider, $routeProvider1) {
     $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
     $routeProvider1
@@ -9,6 +9,10 @@ var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource'
     .when('/form', {
       templateUrl: '/form',
       controller: 'FormController'
+    })
+    .when('/restaurants/new',{
+      templateUrl: 'restaurants/new.html',
+      controller: 'PaginationsCtrl'
     })
     .when('/dashboard', {
       templateUrl: 'views/dashboard.html',
@@ -82,9 +86,6 @@ var todoApp = angular.module("todoApp", ['ui.bootstrap', 'ngRoute', 'ngResource'
   });
   
 
-todoApp.factory('Restaurent', function($resource){
-  return $resource('/restaurants');
-});
 var model_data = {
     name: 'Adam',
     items:[
@@ -135,11 +136,35 @@ todoApp.controller("TodoCtrlController", ['$scope', '$location', 'session',  fun
   };
 }]);
 
-todoApp.controller("PaginationsCtrl", ['$scope', '$location', 'Restaurent', function($scope, $location, Restaurent){
+todoApp.controller("PaginationsCtrl", ['$scope', '$location', 'Restaurant', function($scope, $location, Restaurant){
+  $scope.errorhandler = function(){
+    alert('Pls contact server')
+  };
+  $scope.is_new = false;
+  $scope.is_list = true;
+  $scope.is_list = false;
+  $scope.restaurant = new Restaurant($scope.errorhandler)
   $scope.items = [{name: 'sanjiv'}, {name: 'rajiv'}];
-  $scope.restuarents = Restaurent.query();
-
+  $scope.restuarents = $scope.restaurant.all();
   
+  $scope.successhandler = function(list){
+    $scope.restuarents.push(list);
+  }
+
+  $scope.addrestuarant = function(){
+    console.log($scope);
+    var attrs = {"name" : $scope.restaurant.name, "desc" : $scope.restaurant.desc};
+    console.log(attrs);
+    $scope.restaurant.create(attrs, $scope.successhandler);
+  } 
+  
+  $scope.deleterest = function(i){
+
+  }
+
+  $scope.$on('$routeChangeStart', function(next, current) { 
+    console.log('routes changes');
+  })
 }]);
 
 todoApp.controller("FormController", ['$scope', '$location',  function($scope, $location){

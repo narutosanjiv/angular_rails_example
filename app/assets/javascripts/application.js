@@ -18,4 +18,5 @@
 //= require angular-resource
 //= require ui-bootstrap.min
 //= require ui-bootstrap-tpls.min
+//= require restaurants
 //= require home

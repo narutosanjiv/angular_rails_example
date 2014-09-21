@@ -1,0 +1,13 @@
+%form{:'ng-submit' => 'addrestuarant()'}
+  .form-group
+    %label{:for => "inputEmail"} 
+      Name
+    %input#inputEmail.form-control{:placeholder => "Email", :type => "text", :'ng-model' => 'restaurant.name'}/
+  .form-group
+    %label{:for => "inputPassword"} 
+      Desc
+    %input#inputPassword.form-control{:placeholder => "text", :type => "text", ':ng-model' => 'restaurant.desc'}/ 
+  .row
+    %button{type: 'submit'}
+      Save
+  
