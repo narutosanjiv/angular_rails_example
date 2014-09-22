@@ -17,4 +17,8 @@ class HomeController < ApplicationController
   def filter
 
   end
+
+  def directive
+
+  end
 end

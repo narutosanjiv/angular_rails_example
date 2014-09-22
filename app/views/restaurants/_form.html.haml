@@ -1,13 +1,13 @@
-%form{:'ng-submit' => 'addrestuarant()'}
+%form{:'ng-submit' => 'addrestuarant()', class: 'form-horizontal'}
   .form-group
-    %label{:for => "inputEmail"} 
+    %label{:for => "inputName"} 
       Name
-    %input#inputEmail.form-control{:placeholder => "Email", :type => "text", :'ng-model' => 'restaurant.name'}/
+    %input#inputEmail.form-control{:placeholder => "Name", :type => "text", :'ng-model' => 'restaurant.name'}/
   .form-group
-    %label{:for => "inputPassword"} 
+    %label{:for => "inputDesc"} 
       Desc
-    %input#inputPassword.form-control{:placeholder => "text", :type => "text", ':ng-model' => 'restaurant.desc'}/ 
+    %input#inputPassword.form-control{:placeholder => "Desc", :type => "text", ':ng-model' => 'restaurant.desc'}/ 
   .row
-    %button{type: 'submit'}
+    %button{type: 'submit', class: 'btn btn-primary'}
       Save
   

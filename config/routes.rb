@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get '/form' => 'home#form'
   get '/pagination' => 'home#pagination'
   get '/filter' => 'home#filter'
+  get '/directive' => 'home#directive'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

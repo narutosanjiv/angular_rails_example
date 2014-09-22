@@ -1,3 +1,6 @@
+.pull-right
+  %siteheader{:back => "back", :forward => "forward"}
+
 %div{:'ng-view'=> true}
 .container-fluid
   .row-fluid
@@ -15,7 +18,7 @@
             %th
               Desc
         %tbody
-          %tr{"ng-repeat" => "restuarent in restuarents"}
+          %tr{"ng-repeat" => "restuarent in restuarents | offset: currentPage*itemsPerPage |limitTo:itemsPerPage"}
             %td
               {{restuarent.id}} 
             %td
@@ -26,6 +29,15 @@
             %td
               %a{:'ng-href' => "#/restaurants/{{$index}}/delete", class: 'btn btn-danger'}
                 Delete
+        %tfoot
+          %td
+            %ul.pagination
+              %li{"ng-class" => "prevPageDisabled()"}
+                %a{:href => "", "ng-click" => "prevPage()"} « Prev
+              %li{"ng-class" => "{active: n == currentPage}", "ng-click" => "setPage(n)", "ng-repeat" => "n in range()"}
+                %a{:href => "#"} {{$index}}
+              %li{"ng-class" => "nextPageDisabled()"}
+                %a{:href => "", "ng-click" => "nextPage()"} Next »
          
          
       

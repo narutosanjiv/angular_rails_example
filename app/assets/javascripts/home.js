@@ -110,10 +110,76 @@ todoApp.directive('myDirective', function() {
 <label>My Url Field:</label>\
 <input type="text"\
 ng-model="myUrl" />\
-<a href="{{myUrl}}">{{myLinkText}}</a>\
+<a ng-href="{{myUrl}}">{{myLinkText}}</a>\
 </div>'
   }
-})
+});
+
+todoApp.directive('siteheader', function () {
+    return {
+        restrict: 'EACM',
+        template: '<button class="btn">{{back}}</button><button class="btn">{{forward}}</button>',
+        scope: {
+            back: '@back',
+            forward: '@forward',
+            icons: '@icons'
+        },
+        link: function(scope, element, attrs) {
+            $(element[0]).on('click', function() {
+                history.back();
+                scope.$apply();
+            });
+            $(element[1]).on('click', function() {
+                history.forward();
+                scope.$apply();
+            });
+        }
+    };
+});
+
+todoApp.directive('double', function() {
+    return {
+        restrict: 'E',
+        compile: function(tElement, attrs) {
+            var content = tElement.children();
+            tElement.append(content.clone());
+            tElement.replaceWith(tElement.children());
+        }
+    }
+});
+todoApp.directive('ntimes', function() {
+    return {
+        restrict: 'E',
+        compile: function(tElement, attrs) {
+            var content = tElement.children();
+            for (var i = 0; i < attrs.repeat - 1; i++) {
+                tElement.append(content.clone());
+            }
+            tElement.replaceWith(tElement.children());
+        }
+    }
+});
+
+todoApp.directive('alertable', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      show: '='
+    },
+    replace: true, // Replace with the template below
+    transclude: true, // we want to insert custom content inside the directive
+    link: function(scope, element, attrs) {
+      console.log(element);
+      element.find('button').bind('click', function(e){
+        alert('you clicked');
+        return false;
+      })
+      console.log('inside link function');
+    },
+    template: "<div class='alert alert-warning alert-dismissible' ng-transclude></div>"
+  };
+});
+
 todoApp.controller("TodoCtrlController", ['$scope', '$location', 'session',  function($scope, $location, session){
   $scope.todo = model_data;
   session.login('sanjiv', 'sanjiv');
@@ -135,26 +201,37 @@ todoApp.controller("TodoCtrlController", ['$scope', '$location', 'session',  fun
     
   };
 }]);
+todoApp.filter('offset', function() {
+  return function(input, start) {
+    start = parseInt(start, 10);
+    return input.slice(start);
+  };
+});
 
 todoApp.controller("PaginationsCtrl", ['$scope', '$location', 'Restaurant', function($scope, $location, Restaurant){
   $scope.errorhandler = function(){
     alert('Pls contact server')
   };
+  
+  $scope.itemsPerPage = 5;
+  $scope.currentPage = 0;
+  
   $scope.is_new = false;
   $scope.is_list = true;
   $scope.is_list = false;
+  
   $scope.restaurant = new Restaurant($scope.errorhandler)
-  $scope.items = [{name: 'sanjiv'}, {name: 'rajiv'}];
   $scope.restuarents = $scope.restaurant.all();
   
   $scope.successhandler = function(list){
-    $scope.restuarents.push(list);
+    console.log('list')
+    console.log(list);
+    $scope.restuarents.unshift(list);
   }
 
+
   $scope.addrestuarant = function(){
-    console.log($scope);
     var attrs = {"name" : $scope.restaurant.name, "desc" : $scope.restaurant.desc};
-    console.log(attrs);
     $scope.restaurant.create(attrs, $scope.successhandler);
   } 
   
@@ -164,8 +241,50 @@ todoApp.controller("PaginationsCtrl", ['$scope', '$location', 'Restaurant', func
 
   $scope.$on('$routeChangeStart', function(next, current) { 
     console.log('routes changes');
+    console.log(next);
+    console.log(current);
   })
+
+  $scope.range = function() {
+    var rangeSize = 5;
+    var ret = [];
+    var start;
+    start = $scope.currentPage;
+    if ( start > $scope.pageCount()-rangeSize ) {
+      start = $scope.pageCount()-rangeSize+1;
+    }
+    for (var i=start; i<start+rangeSize; i++) {
+      ret.push(i);
+    }
+    return ret;
+  };
+ 
+  $scope.prevPage = function() {
+    if ($scope.currentPage > 0) {
+      $scope.currentPage--;
+    }
+  };
+  $scope.prevPageDisabled = function() {
+    return $scope.currentPage === 0 ? "disabled" : "";
+  };
+  $scope.pageCount = function() {
+    return Math.ceil($scope.restuarents.length/$scope.itemsPerPage)-1;
+  };
+  $scope.nextPage = function() {
+    if ($scope.currentPage < $scope.pageCount()) {
+      $scope.currentPage++;
+    }
+  };
+  $scope.nextPageDisabled = function() {
+    return $scope.currentPage === $scope.pageCount() ? "disabled" : "";
+  };
+  $scope.setPage = function(n) {
+    $scope.currentPage = n;
+  };
+
 }]);
+
+
 
 todoApp.controller("FormController", ['$scope', '$location',  function($scope, $location){
 }]);
